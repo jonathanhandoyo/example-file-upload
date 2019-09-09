@@ -19,13 +19,15 @@ class FileUploaderApplication(val resourceLoader: ResourceLoader) {
 
   @EventListener
   fun onApplicationReady(event: ApplicationReadyEvent) {
+    val resource = resourceLoader.getResource("classpath:test.pdf")
+    println("Content-Length: ${resource.contentLength()}")
     WebClient.create("http://localhost:8081")
       .post()
       .uri("/upload")
       .headers { headers ->
-        headers.set("Content-Type", "application/json")
+        headers.set("Content-Type", "application/pdf")
       }
-      .body(BodyInserters.fromResource(resourceLoader.getResource("classpath:test.pdf")))
+      .body(BodyInserters.fromResource(resource))
       .exchange()
       .flatMap { response -> response.bodyToMono<Boolean>() }
       .doOnNext { println(it) }

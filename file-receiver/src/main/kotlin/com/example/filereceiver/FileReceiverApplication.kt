@@ -18,6 +18,7 @@ class FileReceiverApplication {
 
   @PostMapping(value = ["/upload"], consumes = [MediaType.APPLICATION_PDF_VALUE])
   fun upload(@RequestBody pdf: ByteArrayResource): Mono<Boolean> {
+    println("Content-Length: ${pdf.contentLength()}")
     return true.toMono()
   }
 }
